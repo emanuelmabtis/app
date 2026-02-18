@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA - Página de Fechamento Automático</title>
+    <meta
+      name="description"
+      content="PFA - Página de Fechamento Automático para converter contatos em clientes no WhatsApp."
+    />
+    <style>
+      :root {
+        --card: rgba(16, 31, 24, 0.85);
+        --text: #eafff2;
+        --text-soft: #b4d6c2;
+        --accent: #47ff94;
+        --accent-strong: #17ff72;
+        --border: rgba(71, 255, 148, 0.25);
+        --shadow: 0 0 18px rgba(23, 255, 114, 0.25);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 20% 0%, rgba(71, 255, 148, 0.18), transparent 40%),
+          radial-gradient(circle at 90% 20%, rgba(23, 255, 114, 0.14), transparent 45%),
+          linear-gradient(170deg, #030504 0%, #070d0a 45%, #040706 100%);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 16px 16px 28px;
+      }
+
+      .hero-banner {
+        position: relative;
+        width: 100%;
+        min-height: 260px;
+        display: flex;
+        align-items: flex-end;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        border: 1px solid var(--border);
+        box-shadow:
+          0 18px 34px rgba(0, 0, 0, 0.45),
+          0 0 30px rgba(23, 255, 114, 0.22);
+        background:
+          linear-gradient(160deg, rgba(3, 22, 12, 0.96) 0%, rgba(7, 10, 9, 0.9) 100%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23060f0a'/%3E%3Cstop offset='100%25' stop-color='%230b1b12'/%3E%3C/linearGradient%3E%3CradialGradient id='r' cx='75%25' cy='18%25' r='45%25'%3E%3Cstop offset='0%25' stop-color='%2347ff94' stop-opacity='.85'/%3E%3Cstop offset='100%25' stop-color='%2347ff94' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='1200' height='700'/%3E%3Crect fill='url(%23r)' width='1200' height='700'/%3E%3Cpath d='M0 530 C 200 470, 430 620, 720 560 C 920 520, 1080 430, 1200 380 L1200 700 L0 700Z' fill='%23030a07' fill-opacity='.9'/%3E%3Cpath d='M120 180 L510 140 L900 180 L740 330 L330 350Z' fill='none' stroke='%2347ff94' stroke-opacity='.45' stroke-width='4'/%3E%3C/svg%3E") center/cover no-repeat;
+      }
+
+      .hero-banner::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.78) 100%),
+          radial-gradient(circle at top right, rgba(71, 255, 148, 0.26), transparent 50%);
+      }
+
+      .hero-banner-content {
+        position: relative;
+        z-index: 1;
+        padding: 18px;
+      }
+
+      .hero-kicker {
+        margin: 0 0 8px;
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .hero-banner-title {
+        margin: 0;
+        font-size: clamp(1.15rem, 5vw, 1.4rem);
+        line-height: 1.22;
+      }
+
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 0.76rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: rgba(7, 20, 13, 0.75);
+        box-shadow: var(--shadow);
+        margin-bottom: 14px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.7rem, 8vw, 2.25rem);
+        line-height: 1.12;
+        letter-spacing: 0.02em;
+      }
+
+      .subheadline {
+        margin: 12px 0 18px;
+        font-weight: 600;
+        color: var(--accent);
+        font-size: 1rem;
+        text-transform: uppercase;
+      }
+
+      .tagline {
+        margin: 0;
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: rgba(3, 15, 9, 0.7);
+        color: var(--text-soft);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .cta,
+      .cta-secondary {
+        display: block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+
+      .cta {
+        margin-top: 18px;
+        padding: 14px;
+        color: #001a0b;
+        background: linear-gradient(95deg, var(--accent) 0%, var(--accent-strong) 100%);
+        box-shadow:
+          0 10px 24px rgba(23, 255, 114, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      }
+
+      .section {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        backdrop-filter: blur(3px);
+      }
+
+      .section h2 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      ul,
+      ol {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--text-soft);
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      li + li {
+        margin-top: 4px;
+      }
+
+      .cta-secondary {
+        margin-top: 22px;
+        padding: 15px;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        background: rgba(8, 26, 16, 0.75);
+        box-shadow: var(--shadow);
+      }
+
+      footer {
+        margin-top: 16px;
+        font-size: 0.76rem;
+        color: #85a594;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero-banner" role="img" aria-label="Banner principal da Página de Fechamento Automático">
+        <div class="hero-banner-content">
+          <p class="hero-kicker">Banner principal</p>
+          <h2 class="hero-banner-title">Página moderna para transformar direct em fechamento no WhatsApp.</h2>
+        </div>
+      </header>
+
+      <span class="badge">PFA • Conversão para WhatsApp</span>
+      <h1>PFA - PÁGINA DE FECHAMENTO AUTOMÁTICO</h1>
+      <p class="subheadline">PARE DE PERDER CLIENTE NO DIRECT</p>
+      <p class="tagline">VOCÊ MANDA O LINK ➜ O CLIENTE ENTENDE ➜ E JÁ CHAMA PRA FECHAR</p>
+
+      <a class="cta" href="https://wa.me/5571984396895" target="_blank" rel="noopener noreferrer">
+        CHAMAR NO WHATSAPP AGORA
+      </a>
+
+      <section class="section" aria-labelledby="servicos-title">
+        <h2 id="servicos-title">Para quem é a PFA</h2>
+        <ul>
+          <li>IPTV</li>
+          <li>Shopee e lojas</li>
+          <li>Afiliados</li>
+          <li>FGTS e empréstimo</li>
+          <li>Limpa nome</li>
+          <li>Prestadores de serviço</li>
+          <li>Criadores de conteúdo</li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="beneficios-title">
+        <h2 id="beneficios-title">Benefícios</h2>
+        <ul>
+          <li>Visual profissional</li>
+          <li>Texto focado em conversão</li>
+          <li>Botão direto para WhatsApp</li>
+          <li>Entrega rápida</li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="como-funciona-title">
+        <h2 id="como-funciona-title">Como funciona</h2>
+        <ol>
+          <li>Você me chama no WhatsApp</li>
+          <li>Eu crio sua página personalizada</li>
+          <li>Você começa a usar para fechar mais clientes</li>
+        </ol>
+      </section>
+
+      <a class="cta-secondary" href="https://wa.me/5571984396895" target="_blank" rel="noopener noreferrer">
+        QUERO MINHA PFA AGORA
+      </a>
+
+      <footer>WhatsApp: +55 71 98439-6895</footer>
+    </main>
+  </body>
+</html>
