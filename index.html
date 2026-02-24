@@ -3,255 +3,436 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PFA - Página de Fechamento Automático</title>
+    <title>Gerador de Currículo Personalizado (Sem Integração)</title>
     <meta
       name="description"
-      content="PFA - Página de Fechamento Automático para converter contatos em clientes no WhatsApp."
+      content="Monte um currículo ATS-friendly sem integração com IA: gere texto final e prompt opcional para ChatGPT."
     />
     <style>
       :root {
-        --card: rgba(16, 31, 24, 0.85);
-        --text: #eafff2;
-        --text-soft: #b4d6c2;
-        --accent: #47ff94;
-        --accent-strong: #17ff72;
-        --border: rgba(71, 255, 148, 0.25);
-        --shadow: 0 0 18px rgba(23, 255, 114, 0.25);
+        --bg: #f3f7fb;
+        --card: #ffffff;
+        --ink: #1e293b;
+        --muted: #5b6472;
+        --line: #d8e1ec;
+        --accent: #0f62fe;
+        --accent-soft: #edf3ff;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-        color: var(--text);
-        background:
-          radial-gradient(circle at 20% 0%, rgba(71, 255, 148, 0.18), transparent 40%),
-          radial-gradient(circle at 90% 20%, rgba(23, 255, 114, 0.14), transparent 45%),
-          linear-gradient(170deg, #030504 0%, #070d0a 45%, #040706 100%);
-        min-height: 100vh;
+        color: var(--ink);
+        background: linear-gradient(180deg, #f7faff 0%, var(--bg) 100%);
       }
-
       .page {
-        max-width: 480px;
+        max-width: 1080px;
         margin: 0 auto;
-        padding: 16px 16px 28px;
+        padding: 20px 16px 40px;
       }
-
-      .hero-banner {
-        position: relative;
-        width: 100%;
-        min-height: 260px;
-        display: flex;
-        align-items: flex-end;
-        border-radius: 20px;
-        overflow: hidden;
-        margin-bottom: 16px;
-        border: 1px solid var(--border);
-        box-shadow:
-          0 18px 34px rgba(0, 0, 0, 0.45),
-          0 0 30px rgba(23, 255, 114, 0.22);
-        background:
-          linear-gradient(160deg, rgba(3, 22, 12, 0.96) 0%, rgba(7, 10, 9, 0.9) 100%),
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23060f0a'/%3E%3Cstop offset='100%25' stop-color='%230b1b12'/%3E%3C/linearGradient%3E%3CradialGradient id='r' cx='75%25' cy='18%25' r='45%25'%3E%3Cstop offset='0%25' stop-color='%2347ff94' stop-opacity='.85'/%3E%3Cstop offset='100%25' stop-color='%2347ff94' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='1200' height='700'/%3E%3Crect fill='url(%23r)' width='1200' height='700'/%3E%3Cpath d='M0 530 C 200 470, 430 620, 720 560 C 920 520, 1080 430, 1200 380 L1200 700 L0 700Z' fill='%23030a07' fill-opacity='.9'/%3E%3Cpath d='M120 180 L510 140 L900 180 L740 330 L330 350Z' fill='none' stroke='%2347ff94' stroke-opacity='.45' stroke-width='4'/%3E%3C/svg%3E") center/cover no-repeat;
+      h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 2vw, 2rem); }
+      .intro { margin: 0; color: var(--muted); line-height: 1.5; }
+      .layout {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 16px;
+        margin-top: 16px;
       }
-
-      .hero-banner::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(180deg, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.78) 100%),
-          radial-gradient(circle at top right, rgba(71, 255, 148, 0.26), transparent 50%);
-      }
-
-      .hero-banner-content {
-        position: relative;
-        z-index: 1;
-        padding: 18px;
-      }
-
-      .hero-kicker {
-        margin: 0 0 8px;
-        font-size: 0.74rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--accent);
-        font-weight: 700;
-      }
-
-      .hero-banner-title {
-        margin: 0;
-        font-size: clamp(1.15rem, 5vw, 1.4rem);
-        line-height: 1.22;
-      }
-
-      .badge {
-        display: inline-block;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        padding: 7px 12px;
-        font-size: 0.76rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--accent);
-        background: rgba(7, 20, 13, 0.75);
-        box-shadow: var(--shadow);
-        margin-bottom: 14px;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: clamp(1.7rem, 8vw, 2.25rem);
-        line-height: 1.12;
-        letter-spacing: 0.02em;
-      }
-
-      .subheadline {
-        margin: 12px 0 18px;
-        font-weight: 600;
-        color: var(--accent);
-        font-size: 1rem;
-        text-transform: uppercase;
-      }
-
-      .tagline {
-        margin: 0;
-        padding: 14px 16px;
-        border: 1px solid var(--border);
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
         border-radius: 14px;
-        background: rgba(3, 15, 9, 0.7);
-        color: var(--text-soft);
-        font-size: 0.92rem;
+        padding: 14px;
+      }
+      .stack { display: grid; gap: 10px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      label { font-size: 0.86rem; font-weight: 600; }
+      input, select, textarea {
+        width: 100%;
+        margin-top: 4px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        font: inherit;
+      }
+      textarea { min-height: 84px; resize: vertical; }
+      .mini { font-size: 0.8rem; color: var(--muted); margin: 0; }
+      .exp-item {
+        border: 1px dashed var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+      }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+      button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+      button.secondary { background: #e2e8f0; color: #1f2937; }
+      button.ghost { background: var(--accent-soft); color: #0f47b8; }
+      .output {
+        white-space: pre-wrap;
+        background: #fbfdff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        max-height: 360px;
+        overflow: auto;
         line-height: 1.5;
       }
-
-      .cta,
-      .cta-secondary {
-        display: block;
-        width: 100%;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 12px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
+      .badge {
+        display: inline-block;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: var(--accent-soft);
+        color: #0f47b8;
+        margin-bottom: 8px;
       }
-
-      .cta {
-        margin-top: 18px;
-        padding: 14px;
-        color: #001a0b;
-        background: linear-gradient(95deg, var(--accent) 0%, var(--accent-strong) 100%);
-        box-shadow:
-          0 10px 24px rgba(23, 255, 114, 0.3),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-      }
-
-      .section {
-        margin-top: 20px;
-        padding: 16px;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        background: var(--card);
-        backdrop-filter: blur(3px);
-      }
-
-      .section h2 {
-        margin: 0 0 12px;
-        font-size: 1rem;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-
-      ul,
-      ol {
-        margin: 0;
-        padding-left: 18px;
-        color: var(--text-soft);
-        line-height: 1.6;
-        font-size: 0.95rem;
-      }
-
-      li + li {
-        margin-top: 4px;
-      }
-
-      .cta-secondary {
-        margin-top: 22px;
-        padding: 15px;
-        border: 1px solid var(--accent);
-        color: var(--accent);
-        background: rgba(8, 26, 16, 0.75);
-        box-shadow: var(--shadow);
-      }
-
-      footer {
-        margin-top: 16px;
-        font-size: 0.76rem;
-        color: #85a594;
-        text-align: center;
+      @media (max-width: 920px) {
+        .layout { grid-template-columns: 1fr; }
+        .row { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
     <main class="page">
-      <header class="hero-banner" role="img" aria-label="Banner principal da Página de Fechamento Automático">
-        <div class="hero-banner-content">
-          <p class="hero-kicker">Banner principal</p>
-          <h2 class="hero-banner-title">Página moderna para transformar direct em fechamento no WhatsApp.</h2>
-        </div>
-      </header>
+      <h1>Gerador de Currículo Personalizado (sem integração)</h1>
+      <p class="intro">
+        Preencha os dados e gere seu currículo ATS-friendly. O sistema não integra com IA: ele monta o texto direto e também cria um prompt opcional para ChatGPT.
+      </p>
 
-      <span class="badge">PFA • Conversão para WhatsApp</span>
-      <h1>PFA - PÁGINA DE FECHAMENTO AUTOMÁTICO</h1>
-      <p class="subheadline">PARE DE PERDER CLIENTE NO DIRECT</p>
-      <p class="tagline">VOCÊ MANDA O LINK ➜ O CLIENTE ENTENDE ➜ E JÁ CHAMA PRA FECHAR</p>
+      <section class="layout">
+        <form id="cvForm" class="card stack">
+          <span class="badge">Modo A + B + C</span>
+          <div class="row">
+            <label>Nome completo
+              <input name="nome_completo" required />
+            </label>
+            <label>Cargo desejado
+              <input name="cargo_desejado" required placeholder="Ex.: Atendimento ao Cliente" />
+            </label>
+          </div>
 
-      <a class="cta" href="https://wa.me/5571984396895" target="_blank" rel="noopener noreferrer">
-        CHAMAR NO WHATSAPP AGORA
-      </a>
+          <div class="row">
+            <label>Cidade
+              <input name="cidade" />
+            </label>
+            <label>Estado (UF)
+              <input name="estado_uf" maxlength="2" placeholder="BA" />
+            </label>
+          </div>
 
-      <section class="section" aria-labelledby="servicos-title">
-        <h2 id="servicos-title">Para quem é a PFA</h2>
-        <ul>
-          <li>IPTV</li>
-          <li>Shopee e lojas</li>
-          <li>Afiliados</li>
-          <li>FGTS e empréstimo</li>
-          <li>Limpa nome</li>
-          <li>Prestadores de serviço</li>
-          <li>Criadores de conteúdo</li>
-        </ul>
+          <div class="row">
+            <label>Telefone
+              <input name="telefone" placeholder="Somente números ou com máscara" />
+            </label>
+            <label>E-mail
+              <input name="email" type="email" placeholder="nome@email.com" />
+            </label>
+          </div>
+
+          <div class="row">
+            <label>Tipo de jornada
+              <select name="tipo_jornada" required>
+                <option>Meio turno</option>
+                <option>Integral</option>
+                <option selected>Meio turno ou integral</option>
+              </select>
+            </label>
+            <label>Possui portfólio/projetos fortes?
+              <select name="portfolio">
+                <option value="nao" selected>Não</option>
+                <option value="sim">Sim</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Resumo base (perfil/portfólio)
+            <textarea name="resumo_base" placeholder="Texto livre sobre seu perfil profissional"></textarea>
+          </label>
+
+          <label>Cursos (separe por vírgula)
+            <input name="cursos" placeholder="Informática, Administração, Marketing Digital" />
+          </label>
+
+          <label>Idiomas (separe por vírgula)
+            <input name="idiomas" placeholder="Português (nativo), Inglês (básico)" />
+          </label>
+
+          <label>Habilidades extras (separe por vírgula)
+            <input name="habilidades_extra" placeholder="Empatia, Agilidade, Organização" />
+          </label>
+
+          <div id="experiencias" class="stack"></div>
+          <div class="actions">
+            <button type="button" class="ghost" id="addExp">+ Adicionar experiência</button>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Gerar currículo + prompt</button>
+            <button type="button" id="copyCv" class="secondary">Copiar currículo</button>
+            <button type="button" id="copyPrompt" class="secondary">Copiar prompt</button>
+          </div>
+        </form>
+
+        <section class="stack">
+          <article class="card">
+            <h2>Currículo pronto (TEXT_ATS)</h2>
+            <p class="mini" id="templateUsed">Template selecionado: —</p>
+            <div id="cvOutput" class="output">Preencha o formulário para gerar.</div>
+          </article>
+
+          <article class="card">
+            <h2>Prompt para ChatGPT (opcional)</h2>
+            <div id="promptOutput" class="output">Seu prompt aparece aqui.</div>
+          </article>
+
+          <article class="card">
+            <h2>CANVA layout hints</h2>
+            <div id="canvaHints" class="output"></div>
+          </article>
+        </section>
       </section>
-
-      <section class="section" aria-labelledby="beneficios-title">
-        <h2 id="beneficios-title">Benefícios</h2>
-        <ul>
-          <li>Visual profissional</li>
-          <li>Texto focado em conversão</li>
-          <li>Botão direto para WhatsApp</li>
-          <li>Entrega rápida</li>
-        </ul>
-      </section>
-
-      <section class="section" aria-labelledby="como-funciona-title">
-        <h2 id="como-funciona-title">Como funciona</h2>
-        <ol>
-          <li>Você me chama no WhatsApp</li>
-          <li>Eu crio sua página personalizada</li>
-          <li>Você começa a usar para fechar mais clientes</li>
-        </ol>
-      </section>
-
-      <a class="cta-secondary" href="https://wa.me/5571984396895" target="_blank" rel="noopener noreferrer">
-        QUERO MINHA PFA AGORA
-      </a>
-
-      <footer>WhatsApp: +55 71 98439-6895</footer>
     </main>
+
+    <script>
+      const expContainer = document.getElementById("experiencias");
+      const cvOutput = document.getElementById("cvOutput");
+      const promptOutput = document.getElementById("promptOutput");
+      const templateUsed = document.getElementById("templateUsed");
+      const canvaHints = document.getElementById("canvaHints");
+
+      const HINTS = [
+        "Tamanho: A4",
+        "Fonte sugerida: Montserrat, Inter ou Open Sans",
+        "Cabeçalho central com nome em negrito",
+        "Duas colunas (visual) mantendo texto simples para ATS",
+        "Evitar ícones em excesso; priorizar texto por extenso"
+      ];
+
+      const addExperience = () => {
+        const block = document.createElement("div");
+        block.className = "exp-item";
+        block.innerHTML = `
+          <div class="row">
+            <label>Empresa <input name="exp_empresa" /></label>
+            <label>Cargo <input name="exp_cargo" /></label>
+          </div>
+          <div class="row">
+            <label>Período <input name="exp_periodo" placeholder="Ex.: Jan/2023 - Dez/2024" /></label>
+            <label>Atividades (separe por ;)
+              <input name="exp_atividades" placeholder="Atendimento ao público; Organização de demandas" />
+            </label>
+          </div>
+          <button type="button" class="secondary remove-exp">Remover</button>
+        `;
+        expContainer.appendChild(block);
+        block.querySelector(".remove-exp").addEventListener("click", () => block.remove());
+      };
+
+      document.getElementById("addExp").addEventListener("click", addExperience);
+      addExperience();
+
+      const fixName = (name) =>
+        name
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((part) => (["da", "de", "do", "das", "dos", "e"].includes(part) ? part : part[0].toUpperCase() + part.slice(1)))
+          .join(" ");
+
+      const fixPhone = (raw) => {
+        const digits = (raw || "").replace(/\D/g, "");
+        if (digits.length === 11) return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+        if (digits.length === 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+        return "";
+      };
+
+      const validEmail = (email) => {
+        if (!email) return false;
+        const at = email.indexOf("@");
+        if (at < 1) return false;
+        return email.indexOf(".", at + 2) > at + 1;
+      };
+
+      const arrFromCsv = (text) =>
+        (text || "")
+          .split(",")
+          .map((x) => x.trim())
+          .filter(Boolean);
+
+      const chooseTemplate = ({ experiences, portfolio }) => {
+        if (experiences.length === 0) return portfolio === "sim" ? "T3_PROJECTS" : "T1_MINIMAL_ATS";
+        return "T2_STANDARD";
+      };
+
+      const headline = (cargo) => `${cargo} | Atendimento ao Cliente`.slice(0, 55);
+
+      const objective = ({ cargo, jornada }) =>
+        `Atuar como ${cargo} em ${jornada.toLowerCase()}, contribuindo com comunicação e organização, com foco em experiência positiva para o cliente.`;
+
+      const buildSummary = ({ resumoBase, cursos }) => {
+        const base = resumoBase
+          ? resumoBase.trim()
+          : "Profissional com foco em atendimento, comunicação clara, organização da rotina e adaptação a diferentes demandas.";
+        const extraCourse = cursos.length ? ` Cursos relevantes: ${cursos.slice(0, 3).join(", ")}.` : "";
+        return `${base}${extraCourse}`;
+      };
+
+      const buildSkills = (extras) => [
+        "Atendimento e Relacionamento: comunicação, empatia, resolução de problemas",
+        "Organização e Rotina: gestão de prioridades, agilidade, atenção aos detalhes",
+        "Apoio Administrativo: registro de informações, suporte a processos e follow-up",
+        "Marketing/Divulgação (quando aplicável): apoio à divulgação de produtos e serviços",
+        `Diferenciais: Aprendo rápido e me adapto a novos sistemas e processos${extras.length ? "; " + extras.join(", ") : ""}`
+      ];
+
+      const buildExperience = (experiences) => {
+        if (!experiences.length) {
+          return [
+            "Atuação em Atendimento (informal/apoio)",
+            "- Suporte no atendimento ao público e esclarecimento de dúvidas",
+            "- Organização de demandas e acompanhamento de solicitações",
+            "- Apoio em divulgação de produtos/serviços quando necessário"
+          ].join("\n");
+        }
+
+        return experiences
+          .map((exp) => {
+            const title = `${exp.cargo || "Atuação em Atendimento (informal/apoio)"}${exp.empresa ? ` | ${exp.empresa}` : ""}`;
+            const period = exp.periodo ? `Período: ${exp.periodo}` : "Período: Disponível sob demanda";
+            const tasks = exp.atividades.length
+              ? exp.atividades.map((a) => `- ${a}`).join("\n")
+              : "- Apoio ao atendimento e rotina operacional";
+            return `${title}\n${period}\n${tasks}`;
+          })
+          .join("\n\n");
+      };
+
+      const normalizeCourse = (course) => {
+        const map = {
+          administracao: "Administração",
+          informatica: "Informática (Básico a Intermediário)",
+          "marketing digital": "Marketing Digital"
+        };
+        const key = course.toLowerCase();
+        return map[key] || course;
+      };
+
+      const buildCv = (data) => {
+        const headerParts = [data.nome, data.local, data.telefone, data.email].filter(Boolean);
+        const sections = [
+          headerParts.join(" | "),
+          `Headline: ${headline(data.cargo)}`,
+          `Objetivo: ${objective(data)}`,
+          `Resumo Profissional: ${buildSummary({ resumoBase: data.resumoBase, cursos: data.cursos })}`,
+          "Habilidades:\n" + buildSkills(data.habilidades).map((s) => `- ${s}`).join("\n")
+        ];
+
+        if (data.template === "T2_STANDARD") {
+          sections.push("Experiência Profissional:\n" + buildExperience(data.experiences));
+        } else if (data.template === "T3_PROJECTS") {
+          sections.push("Projetos / Atividades:\n" + buildExperience(data.experiences));
+        }
+
+        if (data.template === "T1_MINIMAL_ATS") {
+          sections.push("Experiências / Atividades:\n" + buildExperience(data.experiences));
+        }
+
+        const courses = data.cursos.length ? data.cursos.map(normalizeCourse).join(", ") : "Não informado";
+        sections.push(`Formação e Cursos: ${courses}`);
+        if (data.idiomas.length) sections.push(`Idiomas: ${data.idiomas.join(", ")}`);
+
+        return sections.join("\n\n").replace(/\s+/g, " ").replace(/ \|/g, " |").replace(/\n /g, "\n");
+      };
+
+      const buildPrompt = (data, cvText) =>
+`Você é um especialista em RH e revisão PT-BR. Gere um currículo ATS-friendly, 1 página, com linguagem profissional e sem inventar dados.
+Regras:
+1) Corrija ortografia, acentos e pontuação.
+2) Não invente empresas, datas ou números.
+3) Organize: Cabeçalho, Objetivo, Resumo, Habilidades, Experiência/Atividades, Formação/Cursos e Idiomas.
+4) Use bullets curtos e fortes.
+5) Entregue duas versões: VERSÃO A (simples ATS) e VERSÃO B (completa e persuasiva).
+
+DADOS DO CANDIDATO (corrigir apenas formatação/ortografia):
+NOME: ${data.nome}
+CIDADE/UF: ${data.local || "Não informado"}
+TELEFONE: ${data.telefone || "Não informado"}
+EMAIL: ${data.email || "Não informado"}
+CARGO DESEJADO: ${data.cargo}
+JORNADA: ${data.jornada}
+IDIOMAS: ${data.idiomas.join(", ") || "Não informado"}
+CURSOS: ${data.cursos.join(", ") || "Não informado"}
+DIFERENCIAL: Aprendo rápido e me adapto com facilidade
+TEXTO BASE:
+${data.resumoBase || cvText}`;
+
+      document.getElementById("cvForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const form = new FormData(e.currentTarget);
+
+        const emailRaw = (form.get("email") || "").toString().trim();
+        const email = validEmail(emailRaw) ? emailRaw : "";
+        const city = (form.get("cidade") || "").toString().trim();
+        const uf = (form.get("estado_uf") || "").toString().trim().toUpperCase();
+        const local = city && uf ? `${city} – ${uf}` : (city || uf || "");
+
+        const experiences = [...expContainer.querySelectorAll(".exp-item")]
+          .map((item) => {
+            const empresa = item.querySelector("[name=exp_empresa]").value.trim();
+            const cargo = item.querySelector("[name=exp_cargo]").value.trim();
+            const periodo = item.querySelector("[name=exp_periodo]").value.trim();
+            const atividades = item.querySelector("[name=exp_atividades]").value
+              .split(";")
+              .map((x) => x.trim())
+              .filter(Boolean);
+            return { empresa, cargo, periodo, atividades };
+          })
+          .filter((exp) => exp.empresa || exp.cargo || exp.periodo || exp.atividades.length);
+
+        const data = {
+          nome: fixName((form.get("nome_completo") || "").toString()),
+          cargo: (form.get("cargo_desejado") || "").toString().trim(),
+          jornada: (form.get("tipo_jornada") || "").toString(),
+          resumoBase: (form.get("resumo_base") || "").toString().trim(),
+          cursos: arrFromCsv((form.get("cursos") || "").toString()),
+          idiomas: arrFromCsv((form.get("idiomas") || "").toString()),
+          habilidades: arrFromCsv((form.get("habilidades_extra") || "").toString()),
+          telefone: fixPhone((form.get("telefone") || "").toString()),
+          email,
+          local,
+          portfolio: (form.get("portfolio") || "nao").toString(),
+          experiences
+        };
+
+        data.template = chooseTemplate(data);
+        const cv = buildCv(data);
+        const prompt = buildPrompt(data, cv);
+
+        cvOutput.textContent = cv;
+        promptOutput.textContent = prompt;
+        templateUsed.textContent = `Template selecionado: ${data.template}`;
+        canvaHints.textContent = HINTS.map((h) => `- ${h}`).join("\n");
+      });
+
+      document.getElementById("copyCv").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(cvOutput.textContent);
+      });
+
+      document.getElementById("copyPrompt").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(promptOutput.textContent);
+      });
+
+      canvaHints.textContent = HINTS.map((h) => `- ${h}`).join("\n");
+    </script>
   </body>
 </html>
